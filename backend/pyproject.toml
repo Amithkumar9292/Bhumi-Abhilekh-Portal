@@ -1,0 +1,47 @@
+[tool.pyrefly]
+# backend/ is the Python project root: `app`, `tests` and the Alembic
+# migration scripts all import each other as top-level modules from here.
+project-includes = ["app/**/*.py", "tests/**/*.py", "alembic/**/*.py"]
+project-excludes = ["venv312/**", ".pytest_cache/**", "**/__pycache__/**"]
+# Only first-party code lives here. Third-party packages are resolved from
+# site-packages, never from this path -- otherwise local directories such as
+# `alembic/` would shadow the installed `alembic` distribution.
+search-path = ["."]
+python-version = "3.12"
+python-interpreter-path = "venv312/Scripts/python.exe"
+output-format = "min-text"
+
+[tool.ruff]
+target-version = "py312"
+src = ["app", "tests"]
+# `venv312` holds site-packages that re-export many vendored modules; scanning it
+# produces thousands of findings that are not this project's code.
+extend-exclude = ["venv312", "alembic"]
+
+[tool.ruff.lint]
+# Only defect classes are enforced. Style/modernisation rules are deliberately not
+# selected: this codebase standardises on `Optional[X]` (not PEP 604 `X | None`)
+# and on import order that is not isort-canonical, so flagging those would report
+# ~250 findings that contradict the established conventions.
+select = ["E4", "E7", "E9", "F", "B"]
+# E712 is a false positive throughout this ORM codebase: `Model.column == True`
+# is SQLAlchemy building a SQL expression, not a Python truth check. Ruff's
+# suggested rewrite (`where(Model.column)`) would change the query's meaning.
+# Every other E7 rule stays enabled.
+ignore = ["E712"]
+
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI's dependency-injection declarations *are* the documented way to express
+# defaults; B008 cannot tell them apart from genuinely unsafe mutable defaults.
+# Listing them here teaches the rule about those calls instead of hiding findings.
+extend-immutable-calls = [
+    "fastapi.Body",
+    "fastapi.Cookie",
+    "fastapi.Depends",
+    "fastapi.File",
+    "fastapi.Form",
+    "fastapi.Header",
+    "fastapi.Path",
+    "fastapi.Query",
+    "fastapi.Security",
+]

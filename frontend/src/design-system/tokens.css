@@ -1,0 +1,183 @@
+/* ================================================================
+   DESIGN TOKENS — Intelligent Land Record System
+   Government of India inspired modern design system
+   ================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ── Brand Colors ──────────────────────────────────────── */
+  --color-navy-950: #00204A;
+  --color-navy-900: #003580;
+  --color-navy-800: #004AAD;
+  --color-navy-700: #0060D4;
+  --color-navy-600: #1A75E0;
+  --color-navy-500: #3D8FEC;
+  --color-navy-400: #6BABF5;
+  --color-navy-300: #9DC8F9;
+  --color-navy-200: #C9E2FC;
+  --color-navy-100: #E6F1FD;
+  --color-navy-50:  #F0F7FF;
+
+  /* ── Saffron (Accent) ──────────────────────────────────── */
+  --color-saffron-700: #B34B00;
+  --color-saffron-600: #D65B00;
+  --color-saffron-500: #FF6B00;
+  --color-saffron-400: #FF8C38;
+  --color-saffron-300: #FFB077;
+  --color-saffron-200: #FFD4B3;
+  --color-saffron-100: #FFF0E5;
+  --color-saffron-50:  #FFF8F5;
+
+  /* ── India Green (Secondary Accent) ───────────────────── */
+  --color-green-800: #0A5E06;
+  --color-green-700: #0D7A08;
+  --color-green-600: #138808;
+  --color-green-500: #18A80A;
+  --color-green-400: #3DC72F;
+  --color-green-300: #7ADB6F;
+  --color-green-200: #B8F0B3;
+  --color-green-100: #E4F9E2;
+  --color-green-50:  #F2FCF2;
+
+  /* ── Neutrals ──────────────────────────────────────────── */
+  --color-slate-950: #0F1923;
+  --color-slate-900: #1A2332;
+  --color-slate-800: #243447;
+  --color-slate-700: #334D6B;
+  --color-slate-600: #435E7A;
+  --color-slate-500: #546E8A;
+  --color-slate-400: #6F8AA8;
+  --color-slate-300: #94A9C0;
+  --color-slate-200: #BECCD8;
+  --color-slate-150: #D0D9E4;
+  --color-slate-100: #E3EAF0;
+  --color-slate-75:  #EFF3F7;
+  --color-slate-50:  #F5F7FA;
+  --color-white:     #FFFFFF;
+
+  /* ── Semantic Status Colors ────────────────────────────── */
+  --color-success-700: #065F46;
+  --color-success-600: #0B8043;
+  --color-success-500: #10A65A;
+  --color-success-100: #D1FAE5;
+  --color-success-50:  #ECFDF5;
+
+  --color-warning-700: #92400E;
+  --color-warning-600: #B45309;
+  --color-warning-500: #F29900;
+  --color-warning-100: #FEF3C7;
+  --color-warning-50:  #FFFBEB;
+
+  --color-error-700:  #9B1C1C;
+  --color-error-600:  #C5221F;
+  --color-error-500:  #E53E3E;
+  --color-error-100:  #FEE2E2;
+  --color-error-50:   #FEF2F2;
+
+  --color-info-700:   #1E40AF;
+  --color-info-600:   #2563EB;
+  --color-info-500:   #3B82F6;
+  --color-info-100:   #DBEAFE;
+  --color-info-50:    #EFF6FF;
+
+  /* ── Typography ────────────────────────────────────────── */
+  --font-primary:   'Noto Sans', 'Segoe UI', system-ui, sans-serif;
+  --font-secondary: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-mono:      'JetBrains Mono', 'Cascadia Code', monospace;
+
+  --text-xs:    0.6875rem;  /* 11px */
+  --text-sm:    0.75rem;    /* 12px */
+  --text-base:  0.8125rem;  /* 13px */
+  --text-md:    0.875rem;   /* 14px */
+  --text-lg:    1rem;       /* 16px */
+  --text-xl:    1.125rem;   /* 18px */
+  --text-2xl:   1.25rem;    /* 20px */
+  --text-3xl:   1.5rem;     /* 24px */
+  --text-4xl:   1.875rem;   /* 30px */
+  --text-5xl:   2.25rem;    /* 36px */
+
+  --font-weight-normal:   400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  --line-height-tight:  1.25;
+  --line-height-snug:   1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed:1.625;
+
+  /* ── Spacing ────────────────────────────────────────────── */
+  --space-0:    0;
+  --space-1:    0.25rem;    /* 4px */
+  --space-2:    0.5rem;     /* 8px */
+  --space-3:    0.75rem;    /* 12px */
+  --space-4:    1rem;       /* 16px */
+  --space-5:    1.25rem;    /* 20px */
+  --space-6:    1.5rem;     /* 24px */
+  --space-8:    2rem;       /* 32px */
+  --space-10:   2.5rem;     /* 40px */
+  --space-12:   3rem;       /* 48px */
+  --space-16:   4rem;       /* 64px */
+  --space-20:   5rem;       /* 80px */
+
+  /* ── Border Radius ──────────────────────────────────────── */
+  --radius-xs:  2px;
+  --radius-sm:  4px;
+  --radius-md:  6px;
+  --radius-lg:  8px;
+  --radius-xl:  12px;
+  --radius-2xl: 16px;
+  --radius-full:9999px;
+
+  /* ── Shadows ─────────────────────────────────────────────── */
+  --shadow-xs:  0 1px 2px 0 rgb(0 0 0 / 0.04);
+  --shadow-sm:  0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+  --shadow-md:  0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06);
+  --shadow-lg:  0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+  --shadow-xl:  0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+  --shadow-nav: 0 1px 0 0 var(--color-slate-150), 0 2px 8px 0 rgb(0 53 128 / 0.06);
+  --shadow-card:0 0 0 1px var(--color-slate-150), 0 2px 6px 0 rgb(0 0 0 / 0.04);
+  --shadow-focus:0 0 0 3px rgb(0 53 128 / 0.18);
+
+  /* ── Z-index Stack ──────────────────────────────────────── */
+  --z-below:    -1;
+  --z-base:      0;
+  --z-raised:   10;
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-overlay:  300;
+  --z-modal:    400;
+  --z-toast:    500;
+
+  /* ── Transitions ────────────────────────────────────────── */
+  --transition-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base:   200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow:   300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Layout ─────────────────────────────────────────────── */
+  --header-height:      52px;
+  --topbar-height:      36px;
+  --nav-height:         48px;
+  --sidebar-width:      256px;
+  --sidebar-collapsed:  64px;
+  --content-max-width:  1440px;
+  --content-padding:    var(--space-6);
+
+  /* ── Semantic aliases ───────────────────────────────────── */
+  --bg-body:        var(--color-slate-50);
+  --bg-surface:     var(--color-white);
+  --bg-surface-2:   var(--color-slate-75);
+  --bg-surface-3:   var(--color-slate-100);
+  --text-primary:   var(--color-slate-900);
+  --text-secondary: var(--color-slate-500);
+  --text-tertiary:  var(--color-slate-400);
+  --text-inverse:   var(--color-white);
+  --text-link:      var(--color-navy-700);
+  --border-default: var(--color-slate-150);
+  --border-strong:  var(--color-slate-200);
+  --brand-primary:  var(--color-navy-900);
+  --brand-accent:   var(--color-saffron-500);
+  --brand-green:    var(--color-green-600);
+}

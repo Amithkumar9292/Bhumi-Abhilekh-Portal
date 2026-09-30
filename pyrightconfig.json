@@ -1,0 +1,18 @@
+{
+  "venvPath": ".",
+  "venv": "backend/venv312",
+  "include": ["backend/app", "backend/tests", "backend/alembic"],
+  "exclude": [
+    "**/venv312",
+    "**/__pycache__",
+    "**/.pytest_cache",
+    "**/node_modules"
+  ],
+  "extraPaths": ["backend"],
+  "executionEnvironments": [
+    {
+      "root": "backend",
+      "extraPaths": ["backend"]
+    }
+  ]
+}

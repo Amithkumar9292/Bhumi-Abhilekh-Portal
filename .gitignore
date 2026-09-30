@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+dist/
+build/
+*.egg
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+.npm/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+frontend/dist/
+frontend/.vite/
+
+# Environment secrets
+.env
+# (keep .env.example tracked)
+
+# Uploads (generated at runtime)
+backend/uploads/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/settings.json
+.idea/
+*.suo
+*.user
+
+# Docker volumes (if using local bind mounts)
+postgres_data/
+redis_data/
+mongo_data/

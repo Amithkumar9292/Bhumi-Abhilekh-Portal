@@ -1,0 +1,16 @@
+# Workspace-level Pyrefly config.
+#
+# The authoritative project config lives in `backend/pyproject.toml`
+# (`[tool.pyrefly]`). It takes precedence for every file under `backend/`,
+# because Pyrefly walks upwards from the file and stops at the nearest config.
+#
+# This file exists so that running `pyrefly check` from the repository root
+# (a workspace containing both `frontend/` and `backend/`) resolves the same
+# way the IDE does, instead of falling back to a pyrightconfig.json migration
+# that cannot see the virtualenv.
+project-includes = ["backend/app/**/*.py", "backend/tests/**/*.py", "backend/alembic/**/*.py"]
+project-excludes = ["backend/venv312/**", "**/__pycache__/**", "backend/.pytest_cache/**"]
+search-path = ["backend"]
+python-version = "3.12"
+python-interpreter-path = "backend/venv312/Scripts/python.exe"
+output-format = "min-text"
