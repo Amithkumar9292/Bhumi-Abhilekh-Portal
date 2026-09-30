@@ -350,7 +350,9 @@ class TesseractBackend:
             )
         import pytesseract
 
-        pytesseract.pytesseract.tesseract_cmd = _resolve_tesseract_cmd()
+        cmd = _resolve_tesseract_cmd()
+        assert cmd is not None, "tesseract_cmd resolved to None despite is_available() returning True"
+        pytesseract.pytesseract.tesseract_cmd = cmd
 
         t0 = time.time()
         languages = _resolve_languages()
