@@ -21,6 +21,7 @@ import pytest
 import pytest_asyncio
 from fastapi.testclient import TestClient
 from httpx import AsyncClient, ASGITransport
+from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 
 from app.main import app
@@ -58,6 +59,31 @@ async def test_db(test_engine) -> AsyncGenerator[AsyncSession, None]:
         await session.rollback()
 
 
+@pytest_asyncio.fixture(autouse=True)
+async def clean_tables(test_engine):
+    """Start every test with an empty database.
+
+    `test_db`'s rollback is not sufficient isolation on its own. Any code path
+    that commits while handling a request -- the GIS coordinate sync, a pipeline
+    rerun -- makes every pending row in that session durable, and those rows then
+    outlive the test that created them. Without this fixture a test that counts
+    rows globally passes or fails purely on file ordering, so reordering the
+    suite or running two files together silently changes the result.
+
+    The deletes run through their own committed session rather than `test_db`,
+    because that session is still mid-transaction here and its rollback would
+    undo the cleanup along with the test's own writes. Tables are deleted in
+    reverse dependency order; `alembic_version` is not part of `Base.metadata`
+    and is therefore left alone.
+    """
+    yield
+    Cleaner = async_sessionmaker(test_engine, expire_on_commit=False)
+    async with Cleaner() as session:
+        for table in reversed(Base.metadata.sorted_tables):
+            await session.execute(delete(table))
+        await session.commit()
+
+
 @pytest_asyncio.fixture
 async def seeded_db(test_db: AsyncSession) -> AsyncSession:
     """
@@ -68,8 +94,6 @@ async def seeded_db(test_db: AsyncSession) -> AsyncSession:
     otherwise the second test to request this fixture fails the unique
     constraint on `users.email`.
     """
-    from sqlalchemy import delete
-
     await test_db.execute(
         delete(User).where(User.email.in_([
             "admin@demo.in", "officer@demo.in", "verifier@demo.in", "viewer@demo.in",

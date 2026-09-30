@@ -41,9 +41,11 @@ class TestExtractDocumentCoordinates:
         ) == (26.8467, 80.9467)
 
     def test_reads_dms_with_hemisphere(self):
-        lat, lng = extract_document_coordinates(
+        parsed = extract_document_coordinates(
             "LAT 26°50'48\"N  LNG 80°56'48\"E"
         )
+        assert parsed is not None
+        lat, lng = parsed
         assert lat == pytest.approx(26.8467, abs=1e-3)
         assert lng == pytest.approx(80.9467, abs=1e-3)
 
@@ -126,6 +128,7 @@ class TestSyncGisCoordinate:
         assert coord.longitude == pytest.approx(80.9467)
         assert coord.source == SOURCE_FROM_SCAN
         # A polygon, not a bare point, so the parcel has visible area.
+        assert coord.geojson is not None
         assert coord.geojson["geometry"]["type"] == "Polygon"
         assert record.geometry == coord.geojson
 
@@ -203,6 +206,7 @@ class TestSyncGisCoordinate:
 
         coord = await _centroid(test_db, record)
         assert coord is not None
+        assert coord.geojson is not None
         ring = coord.geojson["geometry"]["coordinates"][0]
         assert ring[0] != ring[1]
 

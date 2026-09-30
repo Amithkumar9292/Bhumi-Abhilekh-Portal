@@ -9,7 +9,7 @@ second document, which duplicates the record and defeats duplicate detection.
 """
 
 import uuid
-from unittest.mock import AsyncMock, patch
+from unittest.mock import ANY, AsyncMock, patch
 
 import pytest
 import pytest_asyncio
@@ -112,9 +112,9 @@ class TestRetryGate:
         assert job.status == ProcessingStatus.QUEUED
         assert job.current_stage == "QUEUED"
         assert job.progress_pct == 0
-        assert job.error_message is None
-        assert job.failed_stage is None
-        assert job.completed_at is None
+        assert job.error_message is None  # type: ignore[comparison-overlap]
+        assert job.failed_stage is None  # type: ignore[comparison-overlap]
+        assert job.completed_at is None  # type: ignore[comparison-overlap]
 
     @pytest.mark.parametrize(
         "status", [ProcessingStatus.FAILED, ProcessingStatus.COMPLETED]
@@ -186,5 +186,4 @@ class TestRetryDispatchFailure:
 
         assert r.status_code == 503
         assert r.json()["detail"] == "Redis unreachable"
-        record.assert_awaited_once()
-        assert record.await_args.args[0] == job.id
+        record.assert_awaited_once_with(job.id, ANY)

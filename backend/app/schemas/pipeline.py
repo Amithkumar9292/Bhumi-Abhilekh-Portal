@@ -64,9 +64,6 @@ class AnomalyFeedItem(AnomalyOut):
     confidence_pct: int = 0
     resolved_by: Optional[uuid.UUID] = None
 
-    class Config:
-        from_attributes = True
-
 
 class AnomalyFeedOut(BaseModel):
     items: list[AnomalyFeedItem]

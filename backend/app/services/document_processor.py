@@ -364,7 +364,7 @@ async def _execute_pipeline(
         scored = [f for f in field_results if f.normalized_value]
         overall = round(sum(f.confidence_score for f in scored) / len(scored), 3) if scored else 0.0
         job.overall_confidence = overall
-        await db.commit()
+        # overall_confidence is flushed with the next _advance commit; no extra round-trip needed.
 
         # ── 9. VALIDATION ────────────────────────────────────────────────
         t0 = time.time()
@@ -381,7 +381,8 @@ async def _execute_pipeline(
         # is never failed because it could not be georeferenced.
         t0 = time.time()
         job.stage_message = "Placing parcel on the cadastral map…"
-        await db.commit()
+        # _sync_gis_coordinate commits the spatial data itself; don't commit
+        # just for this stage message — it saves one extra Postgres round-trip.
         gis_result = await _sync_gis_coordinate(job, db, ocr_result.full_text)
         timings["gis_sync"] = _elapsed(t0)
         await _mongo_log(str(job_id), "GIS_SYNC", gis_result)

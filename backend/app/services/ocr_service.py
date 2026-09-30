@@ -432,9 +432,14 @@ def _tesseract_page(img_path: Path, page: int, languages: str) -> dict:
     data: dict[str, list[Any]] = pytesseract.image_to_data(
         img, lang=languages, config=config, output_type=pytesseract.Output.DICT
     )
-    text = pytesseract.image_to_string(img, lang=languages, config=config)
+    # Reconstruct the full page text directly from the word tokens already
+    # returned by image_to_data. This eliminates the previous image_to_string
+    # call that ran a second full Tesseract pass on the same image, halving
+    # OCR time per page. Block/paragraph/line breaks are approximated from
+    # the block/par/line numbers in the data dict.
     w, h = img.size
     blocks = []
+    text_lines: dict[tuple[int, int, int], list[str]] = {}
     for i in range(len(data["text"])):
         word = data["text"][i].strip()
         if not word:
@@ -456,7 +461,14 @@ def _tesseract_page(img_path: Path, page: int, languages: str) -> dict:
                 },
             )
         )
+        # Group words by (block_num, par_num, line_num) to rebuild lines
+        key = (data["block_num"][i], data["par_num"][i], data["line_num"][i])
+        text_lines.setdefault(key, []).append(word)
+
+    # Join words into lines, then lines into the full page text.
+    text = "\n".join(" ".join(words) for words in text_lines.values())
     return {"text": text, "blocks": blocks}
+
 
 
 async def _pdf_to_images(pdf_path: Path) -> list[Path]:

@@ -113,7 +113,8 @@ async def get_all_gis_records(
         "type": "FeatureCollection",
         "features": features,
         "total": len(features),
-        "from_upload": sum(1 for f in features if f["properties"]["from_upload"]),
+        # Counted from the join map rather than re-indexing each feature dict.
+        "from_upload": sum(1 for record, _ in rows if record.id in sources),
         "disclaimer": (
             "⚠ Coordinates are SYNTHETIC unless read from the document — demo use only"
         ),

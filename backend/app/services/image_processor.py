@@ -14,7 +14,6 @@ Uses Pillow (always available). Enhances image quality before OCR.
 from __future__ import annotations
 
 import logging
-import statistics
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional
@@ -69,7 +68,9 @@ def _sync_analyze(file_path: Path, mime_type: str) -> QualityReport:
         if mime_type == "application/pdf":
             try:
                 from pdf2image import convert_from_path
-                pages = convert_from_path(str(file_path), dpi=150, first_page=1, last_page=1)
+                # 72 DPI is sufficient for quality metrics; 150 DPI is wasteful
+                # and just slows down the IMAGE_QUALITY stage for every PDF.
+                pages = convert_from_path(str(file_path), dpi=72, first_page=1, last_page=1)
                 if pages:
                     img = pages[0].convert("L")  # grayscale
                 else:
@@ -108,9 +109,12 @@ def _sync_analyze(file_path: Path, mime_type: str) -> QualityReport:
             pass  # numpy optional
 
         # ── Brightness / contrast ─────────────────────────────────
-        pixels = list(img.getdata())  # type: ignore
-        brightness = round(statistics.mean(pixels), 2)
-        contrast = round(statistics.stdev(pixels), 2) if len(pixels) > 1 else 0.0
+        # ImageStat computes mean/stdev entirely in C — orders of magnitude
+        # faster than list(img.getdata()) which copies every pixel into Python.
+        from PIL import ImageStat
+        stat = ImageStat.Stat(img)
+        brightness = round(stat.mean[0], 2)
+        contrast = round(stat.stddev[0], 2)
 
         if brightness < 60:
             issues.append("Document is very dark — text may not be readable")
@@ -130,8 +134,9 @@ def _sync_analyze(file_path: Path, mime_type: str) -> QualityReport:
         if contrast < 60:
             proc_img = ImageEnhance.Contrast(proc_img).enhance(1.5)
 
-        # 2. Sharpen if blurry
-        if blur_score is not None and blur_score < 400:
+        # 2. Sharpen only genuinely blurry images (< 200 is visibly blurry).
+        # The old threshold of 400 sharpened nearly every document unnecessarily.
+        if blur_score is not None and blur_score < 200:
             proc_img = proc_img.filter(ImageFilter.SHARPEN)
 
         # 3. Adaptive threshold (binarize) for cleaner OCR
